@@ -58,11 +58,62 @@ export default function App() {
     }
   };
 
-  const addOrder = (data) => {
-    const id = 'OC-2024-' + String(nextOrdId).padStart(3, '0');
-    setNextOrdId((n) => n + 1);
-    setOrdenes((prev) => [{ id, ...data }, ...prev]);
-    showToast('Orden de compra creada');
+  const addOrder = (payload) => {
+    // payload: { isNewProduct, productData?, orderData }
+    if (payload.isNewProduct) {
+      const newProdId = 'PRD-' + String(nextProdId).padStart(3, '0');
+      setNextProdId((n) => n + 1);
+      const newProduct = {
+        id: newProdId,
+        qty: 0,
+        precio: payload.orderData.precio,
+        prov: payload.orderData.prov,
+        ...payload.productData,
+      };
+      setProductos((prev) => [...prev, newProduct]);
+
+      const newOrdId = 'OC-2024-' + String(nextOrdId).padStart(3, '0');
+      setNextOrdId((n) => n + 1);
+      const qty = parseInt(payload.orderData.qty) || 0;
+      const precio = parseFloat(payload.orderData.precio) || 0;
+      const monto = qty * precio;
+      setOrdenes((prev) => [
+        {
+          id: newOrdId,
+          prodId: newProdId,
+          prov: payload.orderData.prov,
+          prod: `${payload.productData.nombre} x${qty}`,
+          qty,
+          monto,
+          fecha: payload.orderData.fecha || new Date().toISOString().slice(0, 10),
+          status: 'Pendiente',
+        },
+        ...prev,
+      ]);
+      showToast('Producto creado y orden registrada');
+    } else {
+      const id = 'OC-2024-' + String(nextOrdId).padStart(3, '0');
+      setNextOrdId((n) => n + 1);
+      const producto = productos.find((p) => p.id === payload.orderData.prodId);
+      const prodName = producto ? producto.nombre : (payload.orderData.prod || 'Producto desconocido');
+      const qty = parseInt(payload.orderData.qty) || 0;
+      const precio = parseFloat(payload.orderData.precio) || 0;
+      const monto = qty * precio;
+      setOrdenes((prev) => [
+        {
+          id,
+          prodId: payload.orderData.prodId,
+          prov: payload.orderData.prov,
+          prod: `${prodName} x${qty}`,
+          qty,
+          monto,
+          fecha: payload.orderData.fecha || new Date().toISOString().slice(0, 10),
+          status: 'Pendiente',
+        },
+        ...prev,
+      ]);
+      showToast('Orden de compra creada');
+    }
   };
 
   const setOrderStatus = (id, status) => {
@@ -102,6 +153,7 @@ export default function App() {
             {activeSection === 'ord' && (
               <OrdersSection
                 ordenes={ordenes}
+                productos={productos}
                 onStatusChange={setOrderStatus}
                 onOpenNew={() => setModalNewOrd(true)}
               />
@@ -119,7 +171,7 @@ export default function App() {
 
       <NewProductModal open={modalNewProd} onClose={() => setModalNewProd(false)} onSubmit={addProduct} />
       <EditProductModal open={modalEditProd} onClose={() => setModalEditProd(false)} product={editProduct} onSubmit={saveEditProduct} />
-      <NewOrderModal open={modalNewOrd} onClose={() => setModalNewOrd(false)} onSubmit={addOrder} />
+      <NewOrderModal open={modalNewOrd} onClose={() => setModalNewOrd(false)} onSubmit={addOrder} productos={productos} />
       <NewDispatchModal open={modalNewDes} onClose={() => setModalNewDes(false)} onSubmit={addDispatch} />
     </div>
   );

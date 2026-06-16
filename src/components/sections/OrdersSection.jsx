@@ -7,7 +7,7 @@ function fmtMoney(v) {
   return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(Math.round(v));
 }
 
-export default function OrdersSection({ ordenes, onStatusChange, onOpenNew }) {
+export default function OrdersSection({ ordenes, productos, onStatusChange, onOpenNew }) {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
@@ -18,6 +18,13 @@ export default function OrdersSection({ ordenes, onStatusChange, onOpenNew }) {
       (!statusFilter || o.status === statusFilter)
     );
   }, [ordenes, search, statusFilter]);
+
+  const renderProduct = (o) => {
+    if (!o.prodId) return o.prod;
+    const product = productos.find((p) => p.id === o.prodId);
+    if (product) return `${product.nombre} x${o.qty} uds`;
+    return <em style={{ color: 'var(--color-text-secondary)' }}>Producto eliminado</em>;
+  };
 
   return (
     <div className="section-block active">
@@ -74,7 +81,7 @@ export default function OrdersSection({ ordenes, onStatusChange, onOpenNew }) {
                   <tr key={o.id}>
                     <td><code style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{o.id}</code></td>
                     <td><strong style={{ fontWeight: 500 }}>{o.prov}</strong></td>
-                    <td>{o.prod}</td>
+                    <td>{renderProduct(o)}</td>
                     <td>{o.qty} uds</td>
                     <td>{fmtMoney(o.monto)}</td>
                     <td style={{ color: 'var(--color-text-secondary)' }}>{o.fecha}</td>

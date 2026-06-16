@@ -14,14 +14,14 @@ export const productos = [
 ];
 
 export const ordenes = [
-  { id: 'OC-2024-001', prov: 'TechDistrib Ltda.', prod: 'Teclados mecánicos RGB x20', qty: 20, monto: 999800, fecha: '2024-06-01', status: 'Aprobado' },
-  { id: 'OC-2024-002', prov: 'SafeWork Chile', prod: 'Guantes nitrilo x50 cajas', qty: 50, monto: 349500, fecha: '2024-06-03', status: 'Pendiente' },
-  { id: 'OC-2024-003', prov: 'Ferretería Central', prod: 'Cinta aislante x30 rollos', qty: 30, monto: 38700, fecha: '2024-06-05', status: 'Pendiente' },
-  { id: 'OC-2024-004', prov: 'MaquiPro S.A.', prod: 'Compresor 50L x2', qty: 2, monto: 499980, fecha: '2024-06-07', status: 'Aprobado' },
-  { id: 'OC-2024-005', prov: 'QuímiCorp Ltda.', prod: 'Solvente industrial 5L x10', qty: 10, monto: 129900, fecha: '2024-06-10', status: 'Rechazado' },
-  { id: 'OC-2024-006', prov: 'UniformesPro', prod: 'Overoles talla L x15', qty: 15, monto: 299850, fecha: '2024-06-12', status: 'Pendiente' },
-  { id: 'OC-2024-007', prov: 'TechDistrib Ltda.', prod: 'Monitores 24" x5', qty: 5, monto: 849950, fecha: '2024-06-14', status: 'Aprobado' },
-  { id: 'OC-2024-008', prov: 'SafeWork Chile', prod: 'Cascos seguridad x30', qty: 30, monto: 269700, fecha: '2024-06-15', status: 'Pendiente' },
+  { id: 'OC-2024-001', prodId: 'PRD-002', prov: 'TechDistrib Ltda.', prod: 'Teclados mecánicos RGB x20', qty: 20, monto: 999800, fecha: '2024-06-01', status: 'Aprobado' },
+  { id: 'OC-2024-002', prodId: 'PRD-004', prov: 'SafeWork Chile', prod: 'Guantes nitrilo x50 cajas', qty: 50, monto: 349500, fecha: '2024-06-03', status: 'Pendiente' },
+  { id: 'OC-2024-003', prodId: 'PRD-007', prov: 'Ferretería Central', prod: 'Cinta aislante x30 rollos', qty: 30, monto: 38700, fecha: '2024-06-05', status: 'Pendiente' },
+  { id: 'OC-2024-004', prodId: 'PRD-005', prov: 'MaquiPro S.A.', prod: 'Compresor 50L x2', qty: 2, monto: 499980, fecha: '2024-06-07', status: 'Aprobado' },
+  { id: 'OC-2024-005', prodId: 'PRD-006', prov: 'QuímiCorp Ltda.', prod: 'Solvente industrial 5L x10', qty: 10, monto: 129900, fecha: '2024-06-10', status: 'Rechazado' },
+  { id: 'OC-2024-006', prodId: 'PRD-008', prov: 'UniformesPro', prod: 'Overoles talla L x15', qty: 15, monto: 299850, fecha: '2024-06-12', status: 'Pendiente' },
+  { id: 'OC-2024-007', prodId: 'PRD-009', prov: 'TechDistrib Ltda.', prod: 'Monitores 24" x5', qty: 5, monto: 849950, fecha: '2024-06-14', status: 'Aprobado' },
+  { id: 'OC-2024-008', prodId: 'PRD-012', prov: 'SafeWork Chile', prod: 'Cascos seguridad x30', qty: 30, monto: 269700, fecha: '2024-06-15', status: 'Pendiente' },
 ];
 
 export const despachos = [
