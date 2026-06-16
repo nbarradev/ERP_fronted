@@ -1,0 +1,488 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,system-ui);font-size:14px;color:var(--color-text-primary);background:var(--color-background-tertiary,#f5f6fa)}
+.erp-shell{display:flex;height:100vh;min-height:600px;overflow:hidden}
+.sidebar{width:220px;min-width:220px;background:#1a3a5c;display:flex;flex-direction:column;padding:0}
+.sidebar-brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar-brand .brand-name{color:#fff;font-size:15px;font-weight:500;display:flex;align-items:center;gap:8px}
+.sidebar-brand .brand-sub{color:rgba(255,255,255,0.5);font-size:11px;margin-top:2px}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-label{color:rgba(255,255,255,0.35);font-size:10px;font-weight:500;letter-spacing:.8px;padding:8px 8px 4px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,0.65);font-size:13px;margin-bottom:2px;transition:background .15s,color .15s}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff}
+.nav-item.active{background:rgba(255,255,255,0.15);color:#fff;font-weight:500}
+.nav-item i{font-size:17px;width:20px;text-align:center}
+.sidebar-footer{padding:12px 8px;border-top:1px solid rgba(255,255,255,0.1)}
+.user-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px}
+.user-av{width:30px;height:30px;border-radius:50%;background:#2e6da4;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:500}
+.user-info .u-name{color:#fff;font-size:12px;font-weight:500}
+.user-info .u-role{color:rgba(255,255,255,0.45);font-size:11px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--color-background-primary,#fff);border-bottom:.5px solid var(--color-border-tertiary);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.badge-notif{background:#e53e3e;color:#fff;border-radius:99px;font-size:10px;padding:1px 5px;font-weight:500}
+.content{flex:1;overflow-y:auto;padding:20px 24px}
+.tab-bar{display:flex;gap:4px;background:var(--color-background-secondary,#f0f2f5);padding:4px;border-radius:10px;margin-bottom:18px;width:fit-content}
+.tab{padding:6px 14px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--color-text-secondary);font-weight:400;transition:all .15s}
+.tab.active{background:var(--color-background-primary,#fff);color:var(--color-text-primary);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:var(--color-background-primary,#fff);border:.5px solid var(--color-border-tertiary);border-radius:12px;padding:14px 16px}
+.kpi-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.kpi-value{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.kpi-sub{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+.kpi-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.kpi-icon.blue{background:#e6f0fb;color:#1a5ca8}
+.kpi-icon.red{background:#fde8e8;color:#c53030}
+.kpi-icon.green{background:#e6f4ea;color:#276749}
+.kpi-icon.amber{background:#fef3dc;color:#975a16}
+.card{background:var(--color-background-primary,#fff);border:.5px solid var(--color-border-tertiary);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.card-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--color-border-tertiary)}
+.card-title{font-size:13px;font-weight:500}
+.card-body{padding:0}
+.search-bar{display:flex;gap:8px;padding:12px 18px;border-bottom:.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.inp{background:var(--color-background-secondary,#f5f6fa);border:.5px solid var(--color-border-secondary);border-radius:8px;padding:7px 10px;font-size:13px;color:var(--color-text-primary);width:220px;outline:none}
+.inp:focus{border-color:#3182ce;box-shadow:0 0 0 2px rgba(49,130,206,.15)}
+select.inp{cursor:pointer;width:150px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:.5px solid var(--color-border-secondary);background:var(--color-background-primary,#fff);color:var(--color-text-primary);font-size:12px;cursor:pointer;font-weight:500;transition:background .12s}
+.btn:hover{background:var(--color-background-secondary,#f5f6fa)}
+.btn.primary{background:#1a5ca8;color:#fff;border-color:#1a5ca8}
+.btn.primary:hover{background:#154e96}
+.btn.danger{background:#c53030;color:#fff;border-color:#c53030}
+.btn.danger:hover{background:#9b2c2c}
+.btn.sm{padding:4px 9px;font-size:11px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--color-background-secondary,#f5f6fa);padding:9px 14px;text-align:left;font-size:11px;font-weight:500;color:var(--color-text-secondary);letter-spacing:.3px;white-space:nowrap}
+td{padding:10px 14px;border-bottom:.5px solid var(--color-border-tertiary);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--color-background-secondary,#f7f8fc)}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:500}
+.pill.green{background:#e6f4ea;color:#276749}
+.pill.red{background:#fde8e8;color:#c53030}
+.pill.amber{background:#fef3dc;color:#975a16}
+.pill.blue{background:#e6f0fb;color:#1a5ca8}
+.pill.gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.pill.purple{background:#ede9fe;color:#5b21b6}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.8}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:var(--color-background-primary,#fff);border-radius:14px;width:480px;max-width:95%;box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.modal-head{padding:16px 20px;border-bottom:.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center}
+.modal-head h3{font-size:14px;font-weight:500}
+.modal-body{padding:20px}
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:12px;color:var(--color-text-secondary);margin-bottom:5px;font-weight:500}
+.form-row input,.form-row select,.form-row textarea{width:100%;background:var(--color-background-secondary);border:.5px solid var(--color-border-secondary);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--color-text-primary);outline:none;font-family:inherit}
+.form-row input:focus,.form-row select:focus{border-color:#3182ce}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-foot{padding:14px 20px;border-top:.5px solid var(--color-border-tertiary);display:flex;justify-content:flex-end;gap:8px}
+.toast{position:absolute;top:16px;right:16px;background:#276749;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:500;z-index:200;display:none;align-items:center;gap:8px}
+.alert-row{background:#fef3dc;border:.5px solid #f6ad55;border-radius:8px;padding:10px 14px;margin:12px 18px;font-size:12px;color:#975a16;display:flex;align-items:center;gap:8px}
+.section-block{display:none}
+.section-block.active{display:block}
+.progress-bar{height:6px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden;width:80px}
+.progress-fill{height:100%;border-radius:99px;background:#3182ce}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+</style>
+
+<h2 class="sr-only">Sistema ERP Logístico — módulos de inventario, órdenes de compra y despachos</h2>
+<div style="position:relative;height:100vh;min-height:600px;overflow:hidden">
+
+<div class="toast" id="toast"><i class="ti ti-check" aria-hidden="true"></i><span id="toast-msg">Operación exitosa</span></div>
+
+<div class="erp-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-name"><i class="ti ti-building-warehouse" aria-hidden="true"></i> LogiERP Pro</div>
+      <div class="brand-sub">Sistema de Gestión Logística</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Principal</div>
+      <div class="nav-item active" id="nav-inv" onclick="showSection('inv')"><i class="ti ti-packages" aria-hidden="true"></i>Inventario</div>
+      <div class="nav-item" id="nav-ord" onclick="showSection('ord')"><i class="ti ti-shopping-cart" aria-hidden="true"></i>Órdenes de Compra</div>
+      <div class="nav-item" id="nav-des" onclick="showSection('des')"><i class="ti ti-truck-delivery" aria-hidden="true"></i>Control de Despachos</div>
+      <div class="nav-label" style="margin-top:8px">Reportes</div>
+      <div class="nav-item" onclick="sendPrompt('¿Puedes generar un resumen del estado actual del ERP con métricas clave de los 3 módulos?')"><i class="ti ti-chart-bar" aria-hidden="true"></i>Dashboard ↗</div>
+      <div class="nav-item" onclick="sendPrompt('¿Cómo puedo exportar los datos del inventario a Excel para el informe APA?')"><i class="ti ti-file-export" aria-hidden="true"></i>Exportar datos ↗</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-av">CM</div>
+        <div class="user-info">
+          <div class="u-name">Carlos Muñoz</div>
+          <div class="u-role">Administrador</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Administración de Inventarios</div>
+      <div class="topbar-actions">
+        <button class="btn" onclick="sendPrompt('¿Qué principios de usabilidad debo documentar en el informe para este módulo de inventario?')"><i class="ti ti-help-circle" aria-hidden="true"></i> Ayuda con informe ↗</button>
+        <button class="btn" style="position:relative"><i class="ti ti-bell" aria-hidden="true"></i><span class="badge-notif" style="position:absolute;top:-4px;right:-4px">3</span></button>
+      </div>
+    </header>
+
+    <div class="content" id="main-content">
+
+      <!-- ═══ INVENTARIO ═══ -->
+      <div class="section-block active" id="sec-inv">
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon blue"><i class="ti ti-packages" aria-hidden="true"></i></div>Total productos</div><div class="kpi-value" id="kpi-total">0</div><div class="kpi-sub">SKUs activos</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon red"><i class="ti ti-alert-triangle" aria-hidden="true"></i></div>Bajo stock</div><div class="kpi-value" id="kpi-low">0</div><div class="kpi-sub">requieren reposición</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon green"><i class="ti ti-currency-dollar" aria-hidden="true"></i></div>Valor total</div><div class="kpi-value" id="kpi-val">$0</div><div class="kpi-sub">inventario actual</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon amber"><i class="ti ti-category" aria-hidden="true"></i></div>Categorías</div><div class="kpi-value">6</div><div class="kpi-sub">tipos de producto</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="ti ti-list" aria-hidden="true"></i> Stock actual</span>
+            <button class="btn primary" onclick="openModal('modal-new-prod')"><i class="ti ti-plus" aria-hidden="true"></i> Registrar producto</button>
+          </div>
+          <div id="inv-alert" class="alert-row" style="display:none"><i class="ti ti-alert-triangle" aria-hidden="true"></i><strong>Alerta de stock mínimo:</strong> <span id="inv-alert-msg"></span></div>
+          <div class="search-bar">
+            <input class="inp" type="text" placeholder="Buscar producto..." id="inv-search" oninput="renderInv()">
+            <select class="inp" id="inv-cat" onchange="renderInv()"><option value="">Todas las categorías</option><option>Electrónica</option><option>Herramientas</option><option>Insumos</option><option>Maquinaria</option><option>Químicos</option><option>Textil</option></select>
+            <select class="inp" id="inv-status" onchange="renderInv()"><option value="">Todos los estados</option><option value="ok">Stock OK</option><option value="low">Bajo stock</option></select>
+          </div>
+          <div class="card-body" style="overflow-x:auto">
+            <table id="inv-table">
+              <thead><tr><th>ID</th><th>Producto</th><th>Categoría</th><th>Cant.</th><th>Mín.</th><th>Estado</th><th>Precio unit.</th><th>Valor total</th><th>Acciones</th></tr></thead>
+              <tbody id="inv-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ ÓRDENES ═══ -->
+      <div class="section-block" id="sec-ord">
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon blue"><i class="ti ti-file-invoice" aria-hidden="true"></i></div>Total órdenes</div><div class="kpi-value" id="kpi-ord-total">0</div><div class="kpi-sub">registradas</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon amber"><i class="ti ti-clock" aria-hidden="true"></i></div>Pendientes</div><div class="kpi-value" id="kpi-ord-pend">0</div><div class="kpi-sub">esperando aprobación</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon green"><i class="ti ti-check" aria-hidden="true"></i></div>Aprobadas</div><div class="kpi-value" id="kpi-ord-apr">0</div><div class="kpi-sub">este mes</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon red"><i class="ti ti-x" aria-hidden="true"></i></div>Rechazadas</div><div class="kpi-value" id="kpi-ord-rej">0</div><div class="kpi-sub">requieren revisión</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="ti ti-shopping-cart" aria-hidden="true"></i> Historial de órdenes</span>
+            <button class="btn primary" onclick="openModal('modal-new-ord')"><i class="ti ti-plus" aria-hidden="true"></i> Nueva orden</button>
+          </div>
+          <div class="search-bar">
+            <input class="inp" type="text" placeholder="Buscar proveedor o producto..." id="ord-search" oninput="renderOrd()">
+            <select class="inp" id="ord-status" onchange="renderOrd()"><option value="">Todos los estados</option><option value="Pendiente">Pendiente</option><option value="Aprobado">Aprobado</option><option value="Rechazado">Rechazado</option></select>
+          </div>
+          <div class="card-body" style="overflow-x:auto">
+            <table><thead><tr><th>N° Orden</th><th>Proveedor</th><th>Producto</th><th>Cantidad</th><th>Monto</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="ord-tbody"></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ DESPACHOS ═══ -->
+      <div class="section-block" id="sec-des">
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon blue"><i class="ti ti-truck" aria-hidden="true"></i></div>Total despachos</div><div class="kpi-value" id="kpi-des-total">0</div><div class="kpi-sub">registrados</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon amber"><i class="ti ti-packages" aria-hidden="true"></i></div>En bodega</div><div class="kpi-value" id="kpi-des-bod">0</div><div class="kpi-sub">esperando salida</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon purple" style="background:#ede9fe;color:#5b21b6"><i class="ti ti-road" aria-hidden="true"></i></div>En tránsito</div><div class="kpi-value" id="kpi-des-tra">0</div><div class="kpi-sub">en camino</div></div>
+          <div class="kpi"><div class="kpi-label"><div class="kpi-icon green"><i class="ti ti-circle-check" aria-hidden="true"></i></div>Entregados</div><div class="kpi-value" id="kpi-des-ent">0</div><div class="kpi-sub">completados</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="ti ti-truck-delivery" aria-hidden="true"></i> Control de despachos</span>
+            <button class="btn primary" onclick="openModal('modal-new-des')"><i class="ti ti-plus" aria-hidden="true"></i> Nuevo despacho</button>
+          </div>
+          <div class="search-bar">
+            <input class="inp" type="text" placeholder="Buscar destino o transportista..." id="des-search" oninput="renderDes()">
+            <select class="inp" id="des-status" onchange="renderDes()"><option value="">Todos los estados</option><option value="En bodega">En bodega</option><option value="En tránsito">En tránsito</option><option value="Entregado">Entregado</option></select>
+          </div>
+          <div class="card-body" style="overflow-x:auto">
+            <table><thead><tr><th>N° Despacho</th><th>Destino</th><th>Transportista</th><th>Productos</th><th>Salida</th><th>Entrega est.</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="des-tbody"></tbody></table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO PRODUCTO -->
+<div class="modal-overlay" id="modal-new-prod" style="display:none" onclick="if(event.target===this)closeModal('modal-new-prod')">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="ti ti-plus" aria-hidden="true"></i> Registrar producto</h3><button class="btn sm" onclick="closeModal('modal-new-prod')"><i class="ti ti-x" aria-hidden="true"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row"><label>Nombre del producto</label><input type="text" id="np-nombre" placeholder="Ej: Cable USB-C 2m"></div>
+        <div class="form-row"><label>Categoría</label><select id="np-cat"><option>Electrónica</option><option>Herramientas</option><option>Insumos</option><option>Maquinaria</option><option>Químicos</option><option>Textil</option></select></div>
+        <div class="form-row"><label>Cantidad inicial</label><input type="number" id="np-qty" placeholder="0" min="0"></div>
+        <div class="form-row"><label>Stock mínimo</label><input type="number" id="np-min" placeholder="0" min="0"></div>
+        <div class="form-row"><label>Precio unitario ($)</label><input type="number" id="np-precio" placeholder="0.00" min="0" step="0.01"></div>
+        <div class="form-row"><label>Proveedor</label><input type="text" id="np-prov" placeholder="Nombre del proveedor"></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('modal-new-prod')">Cancelar</button><button class="btn primary" onclick="addProduct()"><i class="ti ti-check" aria-hidden="true"></i> Registrar</button></div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PRODUCTO -->
+<div class="modal-overlay" id="modal-edit-prod" style="display:none" onclick="if(event.target===this)closeModal('modal-edit-prod')">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="ti ti-edit" aria-hidden="true"></i> Actualizar stock</h3><button class="btn sm" onclick="closeModal('modal-edit-prod')"><i class="ti ti-x" aria-hidden="true"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Producto</label><input type="text" id="ep-nombre" readonly style="opacity:.6"></div>
+      <div class="form-grid">
+        <div class="form-row"><label>Nueva cantidad</label><input type="number" id="ep-qty" min="0"></div>
+        <div class="form-row"><label>Nuevo precio ($)</label><input type="number" id="ep-precio" min="0" step="0.01"></div>
+      </div>
+      <input type="hidden" id="ep-id">
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('modal-edit-prod')">Cancelar</button><button class="btn primary" onclick="saveEdit()"><i class="ti ti-check" aria-hidden="true"></i> Guardar cambios</button></div>
+  </div>
+</div>
+
+<!-- MODAL NUEVA ORDEN -->
+<div class="modal-overlay" id="modal-new-ord" style="display:none" onclick="if(event.target===this)closeModal('modal-new-ord')">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="ti ti-shopping-cart" aria-hidden="true"></i> Nueva orden de compra</h3><button class="btn sm" onclick="closeModal('modal-new-ord')"><i class="ti ti-x" aria-hidden="true"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row"><label>Proveedor</label><input type="text" id="no-prov" placeholder="Nombre del proveedor"></div>
+        <div class="form-row"><label>Producto</label><input type="text" id="no-prod" placeholder="Descripción del producto"></div>
+        <div class="form-row"><label>Cantidad</label><input type="number" id="no-qty" placeholder="0" min="1"></div>
+        <div class="form-row"><label>Precio unitario ($)</label><input type="number" id="no-precio" placeholder="0.00" step="0.01"></div>
+        <div class="form-row"><label>Fecha requerida</label><input type="date" id="no-fecha"></div>
+        <div class="form-row"><label>Categoría</label><select id="no-cat"><option>Electrónica</option><option>Herramientas</option><option>Insumos</option><option>Maquinaria</option><option>Químicos</option><option>Textil</option></select></div>
+      </div>
+      <div class="form-row"><label>Observaciones</label><textarea id="no-obs" rows="2" placeholder="Notas adicionales..."></textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('modal-new-ord')">Cancelar</button><button class="btn primary" onclick="addOrden()"><i class="ti ti-check" aria-hidden="true"></i> Crear orden</button></div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO DESPACHO -->
+<div class="modal-overlay" id="modal-new-des" style="display:none" onclick="if(event.target===this)closeModal('modal-new-des')">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="ti ti-truck" aria-hidden="true"></i> Registrar despacho</h3><button class="btn sm" onclick="closeModal('modal-new-des')"><i class="ti ti-x" aria-hidden="true"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row"><label>Destino</label><input type="text" id="nd-dest" placeholder="Ciudad o dirección"></div>
+        <div class="form-row"><label>Transportista</label><select id="nd-trans"><option>TurBus Cargo</option><option>Chilexpress</option><option>StarKen</option><option>DHL Express</option><option>FleetCo</option><option>Correos Chile</option></select></div>
+        <div class="form-row"><label>Productos</label><input type="text" id="nd-prod" placeholder="Descripción de carga"></div>
+        <div class="form-row"><label>Fecha de salida</label><input type="date" id="nd-sal"></div>
+        <div class="form-row"><label>Entrega estimada</label><input type="date" id="nd-est"></div>
+        <div class="form-row"><label>Peso (kg)</label><input type="number" id="nd-peso" placeholder="0" min="0"></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('modal-new-des')">Cancelar</button><button class="btn primary" onclick="addDespacho()"><i class="ti ti-check" aria-hidden="true"></i> Registrar</button></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+let productos=[
+  {id:'PRD-001',nombre:'Cable USB-C 2m',cat:'Electrónica',qty:145,min:30,precio:4990,prov:'TechDistrib Ltda.'},
+  {id:'PRD-002',nombre:'Teclado mecánico RGB',cat:'Electrónica',qty:18,min:25,precio:49990,prov:'TechDistrib Ltda.'},
+  {id:'PRD-003',nombre:'Taladro percutor 800W',cat:'Herramientas',qty:34,min:10,precio:89990,prov:'Ferretería Central'},
+  {id:'PRD-004',nombre:'Guantes de nitrilo (caja)',cat:'Insumos',qty:8,min:20,precio:6990,prov:'SafeWork Chile'},
+  {id:'PRD-005',nombre:'Compresor 50L 2HP',cat:'Maquinaria',qty:12,min:5,precio:249990,prov:'MaquiPro S.A.'},
+  {id:'PRD-006',nombre:'Solvente industrial 5L',cat:'Químicos',qty:55,min:15,precio:12990,prov:'QuímiCorp Ltda.'},
+  {id:'PRD-007',nombre:'Cinta aislante (rollo)',cat:'Insumos',qty:3,min:10,precio:1290,prov:'Ferretería Central'},
+  {id:'PRD-008',nombre:'Overol talla L',cat:'Textil',qty:42,min:10,precio:19990,prov:'UniformesPro'},
+  {id:'PRD-009',nombre:'Monitor 24" FHD',cat:'Electrónica',qty:27,min:8,precio:169990,prov:'TechDistrib Ltda.'},
+  {id:'PRD-010',nombre:'Destornillador eléctrico',cat:'Herramientas',qty:6,min:8,precio:34990,prov:'Ferretería Central'},
+  {id:'PRD-011',nombre:'Aceite hidráulico 20L',cat:'Químicos',qty:30,min:10,precio:28990,prov:'QuímiCorp Ltda.'},
+  {id:'PRD-012',nombre:'Casco seguridad ANSI',cat:'Insumos',qty:75,min:20,precio:8990,prov:'SafeWork Chile'},
+];
+
+let ordenes=[
+  {id:'OC-2024-001',prov:'TechDistrib Ltda.',prod:'Teclados mecánicos RGB x20',qty:20,monto:999800,fecha:'2024-06-01',status:'Aprobado'},
+  {id:'OC-2024-002',prov:'SafeWork Chile',prod:'Guantes nitrilo x50 cajas',qty:50,monto:349500,fecha:'2024-06-03',status:'Pendiente'},
+  {id:'OC-2024-003',prov:'Ferretería Central',prod:'Cinta aislante x30 rollos',qty:30,monto:38700,fecha:'2024-06-05',status:'Pendiente'},
+  {id:'OC-2024-004',prov:'MaquiPro S.A.',prod:'Compresor 50L x2',qty:2,monto:499980,fecha:'2024-06-07',status:'Aprobado'},
+  {id:'OC-2024-005',prov:'QuímiCorp Ltda.',prod:'Solvente industrial 5L x10',qty:10,monto:129900,fecha:'2024-06-10',status:'Rechazado'},
+  {id:'OC-2024-006',prov:'UniformesPro',prod:'Overoles talla L x15',qty:15,monto:299850,fecha:'2024-06-12',status:'Pendiente'},
+  {id:'OC-2024-007',prov:'TechDistrib Ltda.',prod:'Monitores 24" x5',qty:5,monto:849950,fecha:'2024-06-14',status:'Aprobado'},
+  {id:'OC-2024-008',prov:'SafeWork Chile',prod:'Cascos seguridad x30',qty:30,monto:269700,fecha:'2024-06-15',status:'Pendiente'},
+];
+
+let despachos=[
+  {id:'DSP-001',dest:'Santiago Centro',trans:'Chilexpress',prod:'Cable USB-C x50 / Teclados x10',sal:'2024-06-01',est:'2024-06-03',status:'Entregado'},
+  {id:'DSP-002',dest:'Valparaíso',trans:'TurBus Cargo',prod:'Compresores x4 / Taladros x6',sal:'2024-06-05',est:'2024-06-07',status:'En tránsito'},
+  {id:'DSP-003',dest:'Concepción',trans:'StarKen',prod:'Overoles x20 / Cascos x25',sal:'2024-06-08',est:'2024-06-11',status:'En tránsito'},
+  {id:'DSP-004',dest:'Antofagasta',trans:'DHL Express',prod:'Solvente industrial x8',sal:'2024-06-10',est:'2024-06-14',status:'En bodega'},
+  {id:'DSP-005',dest:'La Serena',trans:'FleetCo',prod:'Monitores 24" x3',sal:'2024-06-12',est:'2024-06-14',status:'Entregado'},
+  {id:'DSP-006',dest:'Puerto Montt',trans:'Correos Chile',prod:'Guantes nitrilo x30 cajas',sal:'2024-06-13',est:'2024-06-18',status:'En bodega'},
+  {id:'DSP-007',dest:'Temuco',trans:'StarKen',prod:'Aceite hidráulico x10',sal:'2024-06-14',est:'2024-06-16',status:'En tránsito'},
+  {id:'DSP-008',dest:'Arica',trans:'DHL Express',prod:'Destornilladores x8',sal:'2024-06-15',est:'2024-06-18',status:'En bodega'},
+];
+
+let nextProdId=13,nextOrdId=9,nextDesId=9;
+
+function showSection(sec){
+  ['inv','ord','des'].forEach(s=>{
+    document.getElementById('sec-'+s).classList.toggle('active',s===sec);
+    document.getElementById('nav-'+s).classList.toggle('active',s===sec);
+  });
+  const titles={inv:'Administración de Inventarios',ord:'Gestión de Órdenes de Compra',des:'Control de Despachos'};
+  document.getElementById('topbar-title').textContent=titles[sec];
+  if(sec==='inv')renderInv();
+  if(sec==='ord')renderOrd();
+  if(sec==='des')renderDes();
+}
+
+function fmtMoney(v){return '$'+Math.round(v).toLocaleString('es-CL')}
+function statusPill(s){
+  const m={ok:'green',low:'red',Pendiente:'amber',Aprobado:'green',Rechazado:'red','En bodega':'amber','En tránsito':'purple',Entregado:'green'};
+  const icons={ok:'<i class="ti ti-check" aria-hidden="true"></i>',low:'<i class="ti ti-alert-triangle" aria-hidden="true"></i>',Pendiente:'<i class="ti ti-clock" aria-hidden="true"></i>',Aprobado:'<i class="ti ti-check" aria-hidden="true"></i>',Rechazado:'<i class="ti ti-x" aria-hidden="true"></i>','En bodega':'<i class="ti ti-packages" aria-hidden="true"></i>','En tránsito':'<i class="ti ti-truck" aria-hidden="true"></i>',Entregado:'<i class="ti ti-circle-check" aria-hidden="true"></i>'};
+  const labels={ok:'Stock OK',low:'Bajo stock'};
+  return `<span class="pill ${m[s]||'gray'}">${icons[s]||''}${labels[s]||s}</span>`;
+}
+
+function renderInv(){
+  const search=(document.getElementById('inv-search').value||'').toLowerCase();
+  const cat=document.getElementById('inv-cat').value;
+  const statusF=document.getElementById('inv-status').value;
+  let filtered=productos.filter(p=>{
+    const st=p.qty<=p.min?'low':'ok';
+    return(!search||p.nombre.toLowerCase().includes(search)||p.id.toLowerCase().includes(search))
+      &&(!cat||p.cat===cat)
+      &&(!statusF||st===statusF);
+  });
+  const low=productos.filter(p=>p.qty<=p.min);
+  document.getElementById('kpi-total').textContent=productos.length;
+  document.getElementById('kpi-low').textContent=low.length;
+  const totalVal=productos.reduce((s,p)=>s+p.qty*p.precio,0);
+  document.getElementById('kpi-val').textContent=fmtMoney(totalVal);
+  const alertEl=document.getElementById('inv-alert');
+  if(low.length>0){alertEl.style.display='flex';document.getElementById('inv-alert-msg').textContent=low.map(p=>p.nombre+' ('+p.qty+' uds)').join(' · ');}
+  else alertEl.style.display='none';
+  const tbody=document.getElementById('inv-tbody');
+  tbody.innerHTML=filtered.map(p=>{
+    const st=p.qty<=p.min?'low':'ok';
+    const pct=Math.min(100,Math.round(p.qty/p.min*100));
+    return`<tr>
+      <td><code style="font-size:11px;color:var(--color-text-secondary)">${p.id}</code></td>
+      <td><strong style="font-weight:500">${p.nombre}</strong><br><span style="font-size:11px;color:var(--color-text-secondary)">${p.prov}</span></td>
+      <td><span class="pill gray">${p.cat}</span></td>
+      <td>
+        <strong style="font-weight:500">${p.qty}</strong> uds
+        <div class="progress-bar" style="margin-top:4px"><div class="progress-fill" style="width:${pct}%;background:${st==='low'?'#e53e3e':'#38a169'}"></div></div>
+      </td>
+      <td>${p.min} uds</td>
+      <td>${statusPill(st)}</td>
+      <td>${fmtMoney(p.precio)}</td>
+      <td>${fmtMoney(p.qty*p.precio)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn sm" onclick="openEdit(${productos.indexOf(p)})"><i class="ti ti-edit" aria-hidden="true"></i> Editar</button>
+        <button class="btn sm danger" onclick="deleteP(${productos.indexOf(p)})" style="margin-left:4px"><i class="ti ti-trash" aria-hidden="true"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderOrd(){
+  const search=(document.getElementById('ord-search').value||'').toLowerCase();
+  const statusF=document.getElementById('ord-status').value;
+  let filtered=ordenes.filter(o=>(!search||o.prov.toLowerCase().includes(search)||o.prod.toLowerCase().includes(search))&&(!statusF||o.status===statusF));
+  document.getElementById('kpi-ord-total').textContent=ordenes.length;
+  document.getElementById('kpi-ord-pend').textContent=ordenes.filter(o=>o.status==='Pendiente').length;
+  document.getElementById('kpi-ord-apr').textContent=ordenes.filter(o=>o.status==='Aprobado').length;
+  document.getElementById('kpi-ord-rej').textContent=ordenes.filter(o=>o.status==='Rechazado').length;
+  document.getElementById('ord-tbody').innerHTML=filtered.map(o=>{
+    const idx=ordenes.indexOf(o);
+    const actions=o.status==='Pendiente'
+      ?`<button class="btn sm primary" onclick="setOrdStatus(${idx},'Aprobado')"><i class="ti ti-check" aria-hidden="true"></i> Aprobar</button> <button class="btn sm danger" onclick="setOrdStatus(${idx},'Rechazado')" style="margin-left:4px"><i class="ti ti-x" aria-hidden="true"></i> Rechazar</button>`
+      :`<button class="btn sm" onclick="setOrdStatus(${idx},'Pendiente')"><i class="ti ti-refresh" aria-hidden="true"></i> Reabrir</button>`;
+    return`<tr>
+      <td><code style="font-size:11px;color:var(--color-text-secondary)">${o.id}</code></td>
+      <td><strong style="font-weight:500">${o.prov}</strong></td>
+      <td>${o.prod}</td>
+      <td>${o.qty} uds</td>
+      <td>${fmtMoney(o.monto)}</td>
+      <td style="color:var(--color-text-secondary)">${o.fecha}</td>
+      <td>${statusPill(o.status)}</td>
+      <td style="white-space:nowrap">${actions}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDes(){
+  const search=(document.getElementById('des-search').value||'').toLowerCase();
+  const statusF=document.getElementById('des-status').value;
+  let filtered=despachos.filter(d=>(!search||d.dest.toLowerCase().includes(search)||d.trans.toLowerCase().includes(search))&&(!statusF||d.status===statusF));
+  document.getElementById('kpi-des-total').textContent=despachos.length;
+  document.getElementById('kpi-des-bod').textContent=despachos.filter(d=>d.status==='En bodega').length;
+  document.getElementById('kpi-des-tra').textContent=despachos.filter(d=>d.status==='En tránsito').length;
+  document.getElementById('kpi-des-ent').textContent=despachos.filter(d=>d.status==='Entregado').length;
+  document.getElementById('des-tbody').innerHTML=filtered.map(d=>{
+    const idx=despachos.indexOf(d);
+    let nextSt=d.status==='En bodega'?'En tránsito':d.status==='En tránsito'?'Entregado':null;
+    const advBtn=nextSt?`<button class="btn sm primary" onclick="setDesStatus(${idx},'${nextSt}')"><i class="ti ti-arrow-right" aria-hidden="true"></i> ${nextSt}</button>`:'<span style="color:var(--color-text-secondary);font-size:11px">Completado</span>';
+    return`<tr>
+      <td><code style="font-size:11px;color:var(--color-text-secondary)">${d.id}</code></td>
+      <td><strong style="font-weight:500">${d.dest}</strong></td>
+      <td>${d.trans}</td>
+      <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.prod}</td>
+      <td style="color:var(--color-text-secondary)">${d.sal}</td>
+      <td style="color:var(--color-text-secondary)">${d.est}</td>
+      <td>${statusPill(d.status)}</td>
+      <td style="white-space:nowrap">${advBtn}</td>
+    </tr>`;
+  }).join('');
+}
+
+function openModal(id){document.getElementById(id).style.display='flex'}
+function closeModal(id){document.getElementById(id).style.display='none'}
+function toast(msg){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.style.display='flex';setTimeout(()=>t.style.display='none',2500)}
+
+function addProduct(){
+  const n=document.getElementById('np-nombre').value.trim();
+  if(!n){alert('Ingresa el nombre del producto');return}
+  productos.push({id:'PRD-'+String(nextProdId++).padStart(3,'0'),nombre:n,cat:document.getElementById('np-cat').value,qty:parseInt(document.getElementById('np-qty').value)||0,min:parseInt(document.getElementById('np-min').value)||0,precio:parseFloat(document.getElementById('np-precio').value)||0,prov:document.getElementById('np-prov').value||'Sin proveedor'});
+  closeModal('modal-new-prod');renderInv();toast('Producto registrado correctamente');
+  ['np-nombre','np-qty','np-min','np-precio','np-prov'].forEach(id=>document.getElementById(id).value='');
+}
+
+function openEdit(idx){
+  const p=productos[idx];
+  document.getElementById('ep-nombre').value=p.nombre;
+  document.getElementById('ep-qty').value=p.qty;
+  document.getElementById('ep-precio').value=p.precio;
+  document.getElementById('ep-id').value=idx;
+  openModal('modal-edit-prod');
+}
+function saveEdit(){
+  const idx=parseInt(document.getElementById('ep-id').value);
+  productos[idx].qty=parseInt(document.getElementById('ep-qty').value)||0;
+  productos[idx].precio=parseFloat(document.getElementById('ep-precio').value)||0;
+  closeModal('modal-edit-prod');renderInv();toast('Stock actualizado correctamente');
+}
+function deleteP(idx){if(confirm('¿Eliminar '+productos[idx].nombre+'?')){productos.splice(idx,1);renderInv();toast('Producto eliminado');}}
+
+function addOrden(){
+  const p=document.getElementById('no-prov').value.trim();
+  const pr=document.getElementById('no-prod').value.trim();
+  if(!p||!pr){alert('Completa proveedor y producto');return}
+  const qty=parseInt(document.getElementById('no-qty').value)||1;
+  const precio=parseFloat(document.getElementById('no-precio').value)||0;
+  ordenes.unshift({id:'OC-2024-'+String(nextOrdId++).padStart(3,'0'),prov:p,prod:pr+' x'+qty,qty,monto:qty*precio,fecha:new Date().toISOString().slice(0,10),status:'Pendiente'});
+  closeModal('modal-new-ord');renderOrd();toast('Orden de compra creada');
+  ['no-prov','no-prod','no-qty','no-precio','no-obs'].forEach(id=>document.getElementById(id).value='');
+}
+
+function setOrdStatus(idx,st){ordenes[idx].status=st;renderOrd();toast('Orden '+st.toLowerCase()+' correctamente');}
+
+function addDespacho(){
+  const dest=document.getElementById('nd-dest').value.trim();
+  if(!dest){alert('Ingresa el destino');return}
+  despachos.unshift({id:'DSP-'+String(nextDesId++).padStart(3,'0'),dest,trans:document.getElementById('nd-trans').value,prod:document.getElementById('nd-prod').value||'Carga general',sal:document.getElementById('nd-sal').value||new Date().toISOString().slice(0,10),est:document.getElementById('nd-est').value||'—',status:'En bodega'});
+  closeModal('modal-new-des');renderDes();toast('Despacho registrado correctamente');
+  ['nd-dest','nd-prod','nd-sal','nd-est','nd-peso'].forEach(id=>document.getElementById(id).value='');
+}
+
+function setDesStatus(idx,st){despachos[idx].status=st;renderDes();toast('Estado actualizado: '+st);}
+
+renderInv();
+</script>
