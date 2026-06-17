@@ -29,9 +29,9 @@ export default function Sidebar({ activeSection, onChangeSection }) {
           </div>
         ))}
         <div className="nav-label" style={{ marginTop: 8 }}>Reportes</div>
-        <div className="nav-item" onClick={() => {}}>
+        <div className={`nav-item ${activeSection === 'dash' ? 'active' : ''}`} onClick={() => onChangeSection('dash')}>
           <IconChartBar size={17} stroke={2} />
-          Dashboard ↗
+          Dashboard
         </div>
         <div className="nav-item" onClick={() => {}}>
           <IconFileExport size={17} stroke={2} />

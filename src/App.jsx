@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './styles/erp.css';
 import Sidebar from './components/layout/Sidebar.jsx';
 import Topbar from './components/layout/Topbar.jsx';
+import DashboardSection from './components/sections/DashboardSection.jsx';
 import InventorySection from './components/sections/InventorySection.jsx';
 import OrdersSection from './components/sections/OrdersSection.jsx';
 import DispatchSection from './components/sections/DispatchSection.jsx';
@@ -149,6 +150,13 @@ export default function App() {
         <div className="main">
           <Topbar activeSection={activeSection} />
           <div className="content">
+            {activeSection === 'dash' && (
+              <DashboardSection
+                productos={productos}
+                ordenes={ordenes}
+                despachos={despachos}
+              />
+            )}
             {activeSection === 'inv' && (
               <InventorySection
                 productos={productos}

@@ -4,6 +4,7 @@ const titles = {
   inv: 'Administración de Inventarios',
   ord: 'Gestión de Órdenes de Compra',
   des: 'Control de Despachos',
+  dash: 'Dashboard',
 };
 
 export default function Topbar({ activeSection }) {
