@@ -6,6 +6,7 @@ import InventorySection from './components/sections/InventorySection.jsx';
 import OrdersSection from './components/sections/OrdersSection.jsx';
 import DispatchSection from './components/sections/DispatchSection.jsx';
 import Toast from './components/ui/Toast.jsx';
+import ConfirmModal from './components/ui/ConfirmModal.jsx';
 import NewProductModal from './components/forms/NewProductModal.jsx';
 import EditProductModal from './components/forms/EditProductModal.jsx';
 import NewOrderModal from './components/forms/NewOrderModal.jsx';
@@ -31,6 +32,8 @@ export default function App() {
   const [modalNewOrd, setModalNewOrd] = useState(false);
   const [modalNewDes, setModalNewDes] = useState(false);
 
+  const [confirmDelete, setConfirmDelete] = useState(null);
+
   useEffect(() => {
     if (!toast.visible) return;
     const t = setTimeout(() => setToast({ message: '', visible: false }), 2500);
@@ -52,10 +55,14 @@ export default function App() {
   };
 
   const deleteProduct = (p) => {
-    if (window.confirm('¿Eliminar ' + p.nombre + '?')) {
-      setProductos((prev) => prev.filter((x) => x.id !== p.id));
-      showToast('Producto eliminado');
-    }
+    setConfirmDelete(p);
+  };
+
+  const confirmDeleteProduct = () => {
+    if (!confirmDelete) return;
+    setProductos((prev) => prev.filter((x) => x.id !== confirmDelete.id));
+    showToast('Producto eliminado');
+    setConfirmDelete(null);
   };
 
   const addOrder = (payload) => {
@@ -169,6 +176,15 @@ export default function App() {
         </div>
       </div>
 
+      <ConfirmModal
+        open={!!confirmDelete}
+        title="Eliminar producto"
+        message={confirmDelete ? `¿Estás seguro de eliminar "${confirmDelete.nombre}"? Esta acción no se puede deshacer.` : ''}
+        onConfirm={confirmDeleteProduct}
+        onCancel={() => setConfirmDelete(null)}
+        confirmLabel="Eliminar"
+        confirmClass="danger"
+      />
       <NewProductModal open={modalNewProd} onClose={() => setModalNewProd(false)} onSubmit={addProduct} />
       <EditProductModal open={modalEditProd} onClose={() => setModalEditProd(false)} product={editProduct} onSubmit={saveEditProduct} />
       <NewOrderModal open={modalNewOrd} onClose={() => setModalNewOrd(false)} onSubmit={addOrder} productos={productos} />

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconTruck, IconCheck } from '@tabler/icons-react';
+import { IconTruck, IconCheck, IconAlertCircle } from '@tabler/icons-react';
 import Modal from '../ui/Modal.jsx';
 
 const transOptions = ['TurBus Cargo', 'Chilexpress', 'StarKen', 'DHL Express', 'FleetCo', 'Correos Chile'];
@@ -11,12 +11,15 @@ export default function NewDispatchModal({ open, onClose, onSubmit }) {
   const [sal, setSal] = useState('');
   const [est, setEst] = useState('');
   const [peso, setPeso] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = () => {
-    const d = dest.trim();
-    if (!d) { alert('Ingresa el destino'); return; }
+    const errs = {};
+    if (!dest.trim()) errs.dest = 'El destino es obligatorio';
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    setErrors({});
     onSubmit({
-      dest: d,
+      dest: dest.trim(),
       trans,
       prod: prod || 'Carga general',
       sal: sal || new Date().toISOString().slice(0, 10),
@@ -31,12 +34,18 @@ export default function NewDispatchModal({ open, onClose, onSubmit }) {
     onClose();
   };
 
+  const handleClose = () => {
+    setErrors({});
+    onClose();
+  };
+
   return (
-    <Modal open={open} onClose={onClose} title="Registrar despacho" icon={IconTruck}>
+    <Modal open={open} onClose={handleClose} title="Registrar despacho" icon={IconTruck}>
       <div className="form-grid">
         <div className="form-row">
           <label>Destino</label>
-          <input type="text" placeholder="Ciudad o dirección" value={dest} onChange={(e) => setDest(e.target.value)} />
+          <input type="text" placeholder="Ciudad o dirección" value={dest} onChange={(e) => setDest(e.target.value)} className={errors.dest ? 'input-error' : ''} />
+          {errors.dest && <span className="field-error"><IconAlertCircle size={12} stroke={2} />{errors.dest}</span>}
         </div>
         <div className="form-row">
           <label>Transportista</label>
@@ -62,7 +71,7 @@ export default function NewDispatchModal({ open, onClose, onSubmit }) {
         </div>
       </div>
       <div className="modal-foot">
-        <button className="btn" onClick={onClose}>Cancelar</button>
+        <button className="btn" onClick={handleClose}>Cancelar</button>
         <button className="btn primary" onClick={handleSubmit}>
           <IconCheck size={14} stroke={2} /> Registrar
         </button>
